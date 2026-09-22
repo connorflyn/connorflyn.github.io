@@ -1,261 +1,161 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Leaderboard - Flynn Invitational 2026</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<!DOCTYPE HTML>
+<!--
+	Connor Flynn's portfolio
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Flynn, Connor</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+		<!-- Wrapper -->
+			<div id="wrapper">
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        emerald: { 850: '#063826', 900: '#032519', 950: '#01170f' },
-                        gold: { 300: '#fde047', 400: '#facc15', 500: '#eab308', 600: '#ca8a04', 700: '#a16207' }
-                    },
-                    fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Inter', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        body { background-color: #01170f; color: #f3f4f6; font-family: 'Inter', sans-serif; }
-        .gold-gradient-text { background: linear-gradient(135deg, #fef08a 0%, #eab308 50%, #ca8a04 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .gold-gradient-bg { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); }
-    </style>
-</head>
-<body class="min-h-screen flex flex-col justify-between">
+				<!-- Header -->
+					<header id="header" class="alt">
+						<span class="logo"><img src="images/cf_logo.png" alt="" /></span>
+						<p>Data Engineer<br />
+						built by <a href="https://github.com/connorflyn">@connorflyn</a>
+					</header>
 
-    <div class="max-w-md mx-auto w-full min-h-screen flex flex-col bg-emerald-950 shadow-2xl relative border-x border-emerald-900/50">
-        
-        <!-- Header & Top Navigation Bar -->
-        <header class="bg-gradient-to-b from-emerald-900 to-emerald-950 p-4 border-b border-gold-500/30 text-center relative overflow-hidden sticky top-0 z-30 shadow-lg">
-            <div class="relative z-10 flex flex-col items-center">
-                <div class="flex items-center justify-center gap-2 mb-0.5">
-                    <i data-lucide="trees" class="w-4 h-4 text-gold-400"></i>
-                    <span class="text-[10px] font-bold tracking-widest text-gold-400 uppercase">Lake George, NY</span>
-                    <i data-lucide="trees" class="w-4 h-4 text-gold-400"></i>
-                </div>
-                <h1 class="font-serif text-2xl font-extrabold tracking-wider gold-gradient-text">FLYNN INVITATIONAL</h1>
-                <div class="flex items-center gap-2 mt-0.5">
-                    <span class="text-[10px] text-emerald-300/80 font-medium tracking-widest uppercase">EST. 2026</span>
-                    <span class="text-emerald-600">•</span>
-                    <span id="room-code-badge" class="text-[10px] bg-gold-500/20 text-gold-400 px-2 py-0.5 rounded border border-gold-500/40 font-mono font-bold">LIVE SYNC</span>
-                </div>
-            </div>
+				<!-- Nav -->
+					<nav id="nav">
+						<ul>
+							<li><a href="#intro" class="active">About Me</a></li>
+							<li><a href="#first">Skills/Stack</a></li>
+							<li><a href="#second">Portfolio</a></li>
+						</ul>
+					</nav>
 
-            <nav class="flex mt-3 bg-emerald-900/80 p-1 rounded-xl border border-gold-500/20 text-xs font-medium">
-                <a href="index.html" class="flex-1 py-2 rounded-lg flex items-center justify-center gap-1 bg-gold-500 text-emerald-950 font-bold shadow-md">
-                    <i data-lucide="trophy" class="w-3.5 h-3.5"></i>
-                    <span>Leaderboard</span>
-                </a>
-                <a href="scorecard.html" class="flex-1 py-2 rounded-lg flex items-center justify-center gap-1 text-emerald-200 hover:text-white">
-                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                    <span>Scorecard</span>
-                </a>
-                <a href="setup.html" class="flex-1 py-2 rounded-lg flex items-center justify-center gap-1 text-emerald-200 hover:text-white">
-                    <i data-lucide="settings" class="w-3.5 h-3.5"></i>
-                    <span>Setup</span>
-                </a>
-            </nav>
-        </header>
+				<!-- Main -->
+					<div id="main">
 
-        <!-- Main Content -->
-        <main class="flex-1 p-4 pb-20 space-y-4">
-            
-            <div class="bg-gradient-to-r from-emerald-900 via-emerald-850 to-emerald-900 p-3 rounded-xl border border-gold-500/30 flex items-center justify-between gap-2 shadow-md">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-gold-500/20 border border-gold-500/40 text-gold-400 flex items-center justify-center flex-shrink-0">
-                        <i data-lucide="wifi" class="w-4 h-4"></i>
-                    </div>
-                    <div>
-                        <div class="text-xs font-bold text-white flex items-center gap-1">
-                            Match Room: <span id="display-room-code" class="font-mono text-gold-400 font-extrabold uppercase">FLYNN26</span>
-                        </div>
-                        <div class="text-[10px] text-emerald-300/80">Share room code or export summary</div>
-                    </div>
-                </div>
-                <button id="btn-copy-share-link" class="px-3 py-1.5 bg-gold-500 hover:bg-gold-400 text-emerald-950 font-bold text-xs rounded-lg flex items-center gap-1 active:scale-95 transition-transform flex-shrink-0">
-                    <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
-                    <span>Share</span>
-                </button>
-            </div>
+						<!-- About Me -->
+							<section id="intro" class="main">
+								<div class="spotlight">
+									<div class="content">
+										<header class="major">
+											<h2>Hi, I'm Connor Flynn!</h2>
+										</header>
+										<p>I am a data engineer at Ryan-Miranda Partners and live in Boston, Massachusetts. 
+											I am a Certified AWS Cloud Practioner and have Bachelor degrees in Mathematics and Economics. 
+											I am passionate aboout ETL pipelines, Data Modeling and Cloud Infrastructure</p>
+										<ul class="actions">
+											<li><a href="more_about_me.html" class="button">More About Me</a></li>
+										</ul>
+									</div>
+								</div>
+							</section>
 
-            <div class="space-y-3">
-                <div class="flex justify-between items-center px-1">
-                    <h2 class="font-serif font-bold text-base text-gold-400 flex items-center gap-1.5">
-                        <i data-lucide="trophy" class="w-4 h-4"></i> Team Leaderboard
-                    </h2>
-                    <button id="btn-copy-text-summary" class="text-[11px] bg-emerald-900 hover:bg-emerald-800 text-emerald-200 border border-emerald-700 px-2.5 py-1 rounded-lg flex items-center gap-1 transition-all">
-                        <i data-lucide="copy" class="w-3 h-3 text-gold-400"></i> Text Summary
-                    </button>
-                </div>
+						<!-- Skills/Stack -->
+							<section id="first" class="main special">
+								<header class="major">
+									<h2>Skills/Stack</h2>
+								</header>
+								<ul class="statistics">
+									<li class="style1">
+										<span class="icon solid fa-code-branch"></span>
+										<strong>100+</strong> ETL Pipelines
+									</li>
+									<li class="style2">
+										<span class="icon fa-user"></span>
+										<strong>500+</strong> Cloud Users Managed
+									</li>
+									<li class="style3">
+										<span class="icon solid fa-signal"></span>
+										<strong>10</strong> Reports/Dashboards
+									</li>
+								</ul>
+								<ul class="statistics">
+									<li class="style3">
+										<span class="icon solid fa-file-code"></span>
+										<strong></strong> Languages and Libraries
+										<hr>
+										<p>Python, Shell, Linux, Pandas, Git, PowerShell, ect. <p>
+									</li>
+									<li class="style2">
+										<span class="icon solid fa-cubes"></span>
+										<strong></strong> Platforms
+										<hr>
+										<p>AWS, Microsoft, Snowflake<p>
+									</li>
+									<li class="style1">
+										<span class="icon solid fa-gem"></span>
+										<strong></strong> Misc. Tools
+										<hr>
+										<p>Meltano, Stitch, Fivetran, DBT, Airflow, Terraform, Docker, ect.<p>
+									</li>
+								</ul>
+								<footer class="major">
+									<ul class="actions special">
+										<li><a href="index.html" class="button">Back to the top</a></li>
+									</ul>
+								</footer>
+							</section>
 
-                <div id="leaderboard-cards-container" class="space-y-3"></div>
-            </div>
+						<!-- Portfolio -->
+							<section id="second" class="main special">
+								<header class="major">
+									<h2>Portfolio</h2>
+									<p>I have worked for a number of international companies. Here you can find some of my past projects. </p>
+								</header>
+								<a href="Cloud_Infrastructure.html">
+								  <img alt="Cloud Infrastructure" src="images/cloud_structure.png" width="300" height="150">
+								  </a>
+								<a href="API_Integration.html">
+								  <img alt="API Integration" src="images/data_pipelines.png" width="300" height="150">
+								  </a>
+								<a href="Data_Modeling_portfolio.html">
+								  <img alt="Data Modeling" src="images/data_modeling.png" width="300" height="150">
+								  </a>
+								</footer>
+							</section>
 
-            <div class="bg-emerald-900/40 p-4 rounded-xl border border-emerald-800/80 space-y-3">
-                <h3 class="font-serif font-bold text-white text-sm flex items-center gap-2">
-                    <i data-lucide="pie-chart" class="w-4 h-4 text-gold-400"></i> Shot Contributions (MVP Tracker)
-                </h3>
-                <p class="text-[11px] text-emerald-300/70">Number of team shots used per golfer across all scramble holes.</p>
-                <div id="individual-stats-container" class="space-y-3"></div>
-            </div>
+					</div>
 
-        </main>
+				<!-- Footer -->
+					<footer id="footer">
+						<section>
+							<h2>Connor Flynn</h2>
+							<p>Senior Data Engineer, Boston Massachusetts</p>
+							<ul class="actions">
+								<li><a href="more_about_me.html" class="button">More About Me</a></li>
+							</ul>
+						</section>
+						<section>
+							<h2>Contact Information</h2>
+							<dl class="alt">
+								<dt>Address</dt>
+								<dd>98 Pleasant Street &bull; Boston, MA 02125 &bull; USA</dd>
+								<dt>Phone</dt>
+								<dd>+1-(508)-395-2677</dd>
+								<dt>Email</dt>
+								<dd><a href="#">connor.q.flynn@gmail.com</a></dd>
+							</dl>
+							<ul class="icons">
+								<li><a href="https://www.linkedin.com/in/connor-flynn-940707181/" class="icon brands fa-linkedin alt"><span class="label">Twitter</span></a></li>
+								<li><a href="https://github.com/connorflyn" class="icon brands fa-github alt"><span class="label">GitHub</span></a></li>
+							</ul>
+						</section>
+						<p class="copyright">&copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+					</footer>
 
-        <div id="toast-message" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gold-500 text-emerald-950 px-4 py-2.5 rounded-full text-xs font-bold shadow-2xl transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2 z-50">
-            <i data-lucide="check-circle" class="w-4 h-4"></i>
-            <span id="toast-text">Updated!</span>
-        </div>
+			</div>
 
-    </div>
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
 
-    <script>
-        const DEFAULT_COURSE = [
-            { hole: 1, par: 4 }, { hole: 2, par: 5 }, { hole: 3, par: 3 }, { hole: 4, par: 4 },
-            { hole: 5, par: 4 }, { hole: 6, par: 3 }, { hole: 7, par: 4 }, { hole: 8, par: 5 },
-            { hole: 9, par: 4 }, { hole: 10, par: 4 }, { hole: 11, par: 3 }, { hole: 12, par: 5 },
-            { hole: 13, par: 4 }, { hole: 14, par: 4 }, { hole: 15, par: 3 }, { hole: 16, par: 4 },
-            { hole: 17, par: 5 }, { hole: 18, par: 4 }
-        ];
-
-        const STORAGE_KEY = 'FLYNN_INVITATIONAL_2026_STATE';
-        const firebaseConfig = {
-            apiKey: "AIzaSyAgrl9R0YF5XHyjzsoN5iJQQwiMpyl49Ug",
-            authDomain: "flynn-invitational.firebaseapp.com",
-            databaseURL: "https://flynn-invitational-default-rtdb.firebaseio.com",
-            projectId: "flynn-invitational",
-            storageBucket: "flynn-invitational.firebasestorage.app",
-            messagingSenderId: "394140283598",
-            appId: "1:394140283598:web:3268b04be314aeb608d69f"
-        };
-
-        let db = null, dbRef = null, firebaseReady = false;
-        try {
-            if (firebaseConfig.apiKey) { firebase.initializeApp(firebaseConfig); db = firebase.database(); firebaseReady = true; }
-        } catch (e) { console.warn("Firebase init failed:", e); }
-
-        function loadState() {
-            try {
-                const saved = localStorage.getItem(STORAGE_KEY);
-                if (saved) return JSON.parse(saved);
-            } catch (e) {}
-            return {
-                roomCode: "FLYNN26",
-                teams: [
-                    { name: "Adirondack Aviators", players: ["Flynn (C)", "Mike", "Dave", "Chris"], holes: DEFAULT_COURSE.map(h => ({ score: h.par, playerShots: [0,0,0,0], completed: false })) },
-                    { name: "Lake George Legends", players: ["John (C)", "Alex", "Sam", "Matt"], holes: DEFAULT_COURSE.map(h => ({ score: h.par, playerShots: [0,0,0,0], completed: false })) }
-                ]
-            };
-        }
-
-        let localState = loadState();
-
-        function connectToRoom(roomCode) {
-            if (!firebaseReady) return;
-            if (dbRef) dbRef.off();
-            dbRef = db.ref('rooms/' + roomCode);
-            dbRef.on('value', (snapshot) => {
-                const remoteState = snapshot.val();
-                if (remoteState && Array.isArray(remoteState.teams)) {
-                    localState = remoteState;
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(localState));
-                    renderLeaderboard();
-                }
-            });
-        }
-
-        function calculateTeamStats(team) {
-            const completedHolesCount = team.holes.filter(h => h.completed || h.score !== DEFAULT_COURSE[team.holes.indexOf(h)].par).length;
-            const totalStrokes = team.holes.reduce((sum, h) => sum + (h.score || 0), 0);
-            const totalPar = DEFAULT_COURSE.reduce((sum, h) => sum + h.par, 0);
-            const diff = totalStrokes - totalPar;
-            let diffFormatted = diff > 0 ? `+${diff}` : (diff === 0 ? "E" : `${diff}`);
-            const thru = completedHolesCount === 18 ? "F" : (completedHolesCount === 0 ? "NP" : `Thru ${completedHolesCount}`);
-            return { totalStrokes, diffFormatted, thru, diff };
-        }
-
-        function renderLeaderboard() {
-            const container = document.getElementById('leaderboard-cards-container');
-            if (!container) return;
-            container.innerHTML = '';
-
-            const ranked = localState.teams.map((t, idx) => ({ ...t, stats: calculateTeamStats(t) }))
-                .sort((a, b) => a.stats.diff - b.stats.diff);
-
-            ranked.forEach((t, rank) => {
-                const isFirst = rank === 0;
-                const card = document.createElement('div');
-                card.className = `p-4 rounded-2xl border ${isFirst ? 'bg-gradient-to-br from-emerald-900 via-emerald-950 to-emerald-950 border-gold-500 shadow-xl' : 'bg-emerald-900/50 border-emerald-800'}`;
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-2.5">
-                        <div class="flex items-center gap-2.5">
-                            <span class="w-7 h-7 rounded-full ${isFirst ? 'bg-gold-500 text-emerald-950' : 'bg-emerald-800 text-emerald-200'} text-xs font-bold flex items-center justify-center">${rank + 1}</span>
-                            <div>
-                                <h3 class="font-serif font-bold text-white text-sm">${t.name}</h3>
-                                <p class="text-[11px] text-emerald-400">${t.players.filter(Boolean).join(', ')}</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="font-bold text-xl ${isFirst ? 'gold-gradient-text' : 'text-emerald-200'}">${t.stats.diffFormatted}</div>
-                            <div class="text-[10px] text-emerald-400">${t.stats.totalStrokes} Strokes • <span class="text-gold-400 font-semibold">${t.stats.thru}</span></div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-
-            // MVPs
-            const indStatsContainer = document.getElementById('individual-stats-container');
-            indStatsContainer.innerHTML = '';
-            localState.teams.forEach(t => {
-                const playerCounts = t.players.map((p, pIdx) => {
-                    const shots = t.holes.reduce((sum, h) => sum + ((h.playerShots && h.playerShots[pIdx]) || 0), 0);
-                    return { name: p, count: shots };
-                }).filter(p => p.name);
-
-                const maxShots = Math.max(1, ...playerCounts.map(p => p.count));
-                const block = document.createElement('div');
-                block.className = "bg-emerald-950 p-3 rounded-lg border border-emerald-800/60 space-y-2";
-                let rowsHtml = playerCounts.map(p => `
-                    <div class="space-y-1">
-                        <div class="flex justify-between text-xs">
-                            <span class="text-white font-medium">${p.name}</span>
-                            <span class="text-gold-400 font-bold">${p.count} shots</span>
-                        </div>
-                        <div class="w-full h-1.5 bg-emerald-900 rounded-full overflow-hidden">
-                            <div class="h-full gold-gradient-bg rounded-full" style="width: ${Math.min(100, (p.count / maxShots) * 100)}%"></div>
-                        </div>
-                    </div>
-                `).join('');
-                block.innerHTML = `<div class="text-[11px] font-bold text-gold-400 uppercase">${t.name}</div>${rowsHtml}`;
-                indStatsContainer.appendChild(block);
-            });
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const activeRoom = localState.roomCode || "FLYNN26";
-            document.getElementById('display-room-code').textContent = activeRoom;
-            renderLeaderboard();
-            connectToRoom(activeRoom);
-            lucide.createIcons();
-
-            document.getElementById('btn-copy-share-link').onclick = () => {
-                navigator.clipboard.writeText(window.location.href);
-                alert("Link copied!");
-            };
-        });
-    </script>
-</body>
+	</body>
 </html>
